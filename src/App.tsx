@@ -182,7 +182,18 @@ export default function App() {
         })
       });
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          alert(`Lỗi phía máy chủ (${res.status}): ${text || "Không xác định"}`);
+          return;
+        }
+        throw jsonErr;
+      }
+
       if (!res.ok) {
         alert("Lỗi khi thêm nhiệm vụ: " + (data.error || "Không xác định"));
         return;
@@ -200,9 +211,9 @@ export default function App() {
         setDueAt("");
         reloadAllData();
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Lỗi kết nối hoặc xử lý phía máy chủ.");
+      alert("Lỗi kết nối hoặc xử lý nguồn: " + (err?.message || String(err)));
     }
   };
 
