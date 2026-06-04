@@ -3,11 +3,25 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
 import { Task, TaskHistory, DailySummary, UserPreferences } from "./src/types";
+import fs from "fs";
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+
+// Create request-debug log middleware
+app.use((req, res, next) => {
+  const originalSend = res.send;
+  res.send = function(body) {
+    const fileLog = `[${new Date().toISOString()}] ${req.method} ${req.url} - Status: ${res.statusCode}\nPayload: ${JSON.stringify(req.body)}\nResponse: ${String(body).substring(0, 100)}\n-------------------\n`;
+    try {
+      fs.appendFileSync(path.join(process.cwd(), "docs", "request-debug.log"), fileLog);
+    } catch (e) {}
+    return originalSend.apply(this, arguments as any);
+  };
+  next();
+});
 
 // In-Memory Database State
 let tasks: Task[] = [];
