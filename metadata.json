@@ -1,0 +1,6 @@
+{
+  "name": "Focus Flow",
+  "description": "Trợ lý quản lý công việc thông minh - giúp người trẻ bận rộn ra quyết định nhanh, kiểm soát lịch trình và tối ưu hóa năng lượng dựa trên ma trận Eisenhower.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
