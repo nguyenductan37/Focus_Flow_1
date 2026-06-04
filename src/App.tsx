@@ -183,6 +183,11 @@ export default function App() {
       });
 
       const data = await res.json();
+      if (!res.ok) {
+        alert("Lỗi khi thêm nhiệm vụ: " + (data.error || "Không xác định"));
+        return;
+      }
+
       if (data.conflict) {
         // Warning triggered in <= 2s banner
         setConflictData(data);
@@ -197,6 +202,7 @@ export default function App() {
       }
     } catch (err) {
       console.error(err);
+      alert("Lỗi kết nối hoặc xử lý phía máy chủ.");
     }
   };
 
